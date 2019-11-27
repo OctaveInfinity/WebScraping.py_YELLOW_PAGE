@@ -42,7 +42,7 @@ for page in range(1, MAX_PAGE+1):
         except Exception as e:
             phone = None
         else:
-            phone = ''.join([char for char in phone if char.isdigit()]) # must be int
+            phone = int(''.join([char for char in phone if char.isdigit()]))
 
         # Print --------------------------------------------------------
         print(numbered_name)
