@@ -36,9 +36,19 @@ for page in range(1, MAX_PAGE+1):
         if (address_part1 is None) or (address_part2 is None):
             continue 
 
+        # phone --------------------------------------------------------
+        try:
+            phone = company.find('.phone', first=True).text
+        except Exception as e:
+            phone = None
+        else:
+            phone = ''.join([char for char in phone if char.isdigit()]) # must be int
+
+        # Print --------------------------------------------------------
         print(numbered_name)
         print(address_part1, address_part2, sep=', ')
-        
+        print(phone)
+
         print()	
 
 
