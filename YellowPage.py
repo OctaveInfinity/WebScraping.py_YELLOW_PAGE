@@ -17,4 +17,9 @@ for page in range(1, MAX_PAGE+1):
         if numbered_name.find('. ') < 0:
             continue
 
+        # directions ---------------------------------------------------
+        links = company.find('.links', first=True).text
+        if links.find('Directions') < 0:
+            continue
+
         print(numbered_name)
