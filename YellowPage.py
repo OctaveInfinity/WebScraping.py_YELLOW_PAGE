@@ -22,4 +22,25 @@ for page in range(1, MAX_PAGE+1):
         if links.find('Directions') < 0:
             continue
 
+        # address -------------------------------------------------------
+        try:
+            address_part1 = str(company.find('.street-address', first=True).text)
+        except Exception as e:
+            address_part1 = None
+
+        try:
+            address_part2 = str(company.find('.locality', first=True).text)
+        except Exception as e:
+            address_part2 = None
+
+        if (address_part1 is None) or (address_part2 is None):
+            continue 
+
         print(numbered_name)
+        print(address_part1, address_part2, sep=', ')
+        
+        print()	
+
+
+
+        
