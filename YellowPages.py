@@ -24,17 +24,17 @@ for page in range(1, MAX_PAGE+1):
 
         # Numbered_name 	
         numbered_name = pars('.n', company)
-        if (numbered_name.find('. ') < 0):
+        if (numbered_name is None) or (numbered_name.find('. ') < 0):
             continue
 
         # Name
         name = pars('.business-name', company)
-        if (phone is None):
+        if (name is None):
             continue
 
         # Directions 
         directions = pars('.links', company)
-        if (phone is None) or (directions.find('Directions') < 0):
+        if (directions is None) or (directions.find('Directions') < 0):
             continue
         
         # Address 
@@ -50,7 +50,10 @@ for page in range(1, MAX_PAGE+1):
             phone = int(''.join([char for char in phone if char.isdigit()]))
 
         # Print
-        print(numbered_name, '\n',address, '\n',phone, '\n')
+        print(numbered_name)
+        print(address)
+        print(phone)
+        print()
 
         # Dictionary
         company_dict.update({name: {'Adress': address, 'Phone Number': phone}})
