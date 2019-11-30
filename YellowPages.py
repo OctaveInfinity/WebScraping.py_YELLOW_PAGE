@@ -2,50 +2,51 @@ import json
 from requests_html import HTML, HTMLSession
 
 session = HTMLSession()
-MAX_PAGE = 5
 company_dict = {}
+MAX_PAGE = 5
 
-def pars(search_string, company):
+def parse_function(search_string, company_element):
     try:
-        parsed_element = str(company.find(search_string, first=True).text)
+        parsed = str(company_element.find(search_string, first=True).text)
     except:    
-        parsed_element = None
+        parsed = None
     
-    return parsed_element
+    return parsed
 
 # Reading pages
-for page in range(1, MAX_PAGE+1):
-    page = f'https://www.yellowpages.com/austin-tx/plumbers?page={page}'
-    response = session.get(page)
-    companies = response.html.find('div.info')
-    
+for page_count in range(1, MAX_PAGE+1):
+    page_link = f'https://www.yellowpages.com/austin-tx/plumbers?page={page_count}'
+    response = session.get(page_link)
+    companies_list = response.html.find('div.info')
+    print('page_count: ', page_count, '\n')
+        
     # Parsing companies 
-    for company in companies:
+    for company in companies_list:
 
         # Numbered_name 	
-        numbered_name = pars('.n', company)
-        if (numbered_name is None) or (numbered_name.find('. ') < 0):
+        numbered_name = parse_function('.n', company)
+        if (numbered_name.find('. ') < 0) or (numbered_name is None):
             continue
 
         # Name
-        name = pars('.business-name', company)
+        name = parse_function('.business-name', company)
         if (name is None):
             continue
 
         # Directions 
-        directions = pars('.links', company)
-        if (directions is None) or (directions.find('Directions') < 0):
+        directions = parse_function('.links', company)
+        if  (directions.find('Directions') < 0) or (directions is None):
             continue
         
         # Address 
-        address_part1 = pars('.street-address', company)
-        address_part2 = pars('.locality', company)
+        address_part1 = parse_function('.street-address', company)
+        address_part2 = parse_function('.locality', company)
         if (address_part1 is None) or (address_part2 is None):
             continue 
         address = ', '.join([address_part1, address_part2])
 
         # Phone 
-        phone = pars('.phone', company)
+        phone = parse_function('.phone', company)
         if (phone != None):
             phone = int(''.join([char for char in phone if char.isdigit()]))
 
@@ -54,7 +55,7 @@ for page in range(1, MAX_PAGE+1):
         print(address)
         print(phone)
         print()
-
+       
         # Dictionary
         company_dict.update({name: {'Adress': address, 'Phone Number': phone}})
 
